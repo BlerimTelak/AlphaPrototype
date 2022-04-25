@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AlphaPrototypeNET.Data;
 using AlphaPrototypeNET.Models;
+using AlphaPrototypeNET.Services.Interfaces;
 
 namespace AlphaPrototypeNET.Controllers
 {
@@ -11,10 +12,12 @@ namespace AlphaPrototypeNET.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IStudentService studentService;
 
-        public StudentsController(ApplicationDbContext context)
+        public StudentsController(ApplicationDbContext context, IStudentService studentService)
         {
             _context = context;
+            this.studentService = studentService;
         }
 
         // GET: api/Students
