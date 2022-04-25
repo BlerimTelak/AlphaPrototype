@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AlphaPrototypeNET.Data;
 using AlphaPrototypeNET.Models;
 using AlphaPrototypeNET.Services.Interfaces;
+using AlphaPrototypeNET.Exceptions;
 
 namespace AlphaPrototypeNET.Controllers
 {
@@ -24,21 +25,32 @@ namespace AlphaPrototypeNET.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            return await _context.Students.Include(s => s.Department).ToListAsync();
+            try
+            {
+                return await studentService.GetAllStudentsAsync();
+            }
+            catch (Exception)
+            {
+                return Problem();
+            }
         }
 
         // GET: api/Students/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> GetStudent(Guid id)
         {
-            var student = await _context.Students.FindAsync(id);
-
-            if (student == null)
+            try
+            {
+                return await studentService.GetStudenyByIdAsync(id);
+            }
+            catch (ObjectNotFoundException)
             {
                 return NotFound();
             }
-
-            return student;
+            catch (Exception)
+            {
+                return Problem();
+            }
         }
 
         // PUT: api/Students/5
